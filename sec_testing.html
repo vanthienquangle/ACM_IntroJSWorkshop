@@ -1,0 +1,52 @@
+<!---Only print out result and use function--->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <button onclick="play('rock')">Rock</button>
+    <button onclick="play('paper')">Paper</button>
+    <button onclick="play('scissors')">Scissors</button>
+
+    <p id="result"></p>
+
+    <script>
+        function play(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const random = Math.random();
+            let computerChoice;
+
+            if (random < 1/3) {
+                computerChoice = 'rock';
+            } else if (random < 2/3) {
+                computerChoice = 'scissors';
+            } else {
+                computerChoice = 'paper';
+            }
+
+            var result;
+
+            if (userChoice === computerChoice) {
+                result = "It's a tie!";
+            } else if (
+                (userChoice === 'rock' && computerChoice === 'scissors') ||
+                (userChoice === 'scissors' && computerChoice === 'paper') ||
+                (userChoice === 'paper' && computerChoice === 'rock')
+            ) {
+                result = "You win!";
+            } else {
+                result = "You lose!";
+            }
+
+            document.getElementById('result').innerText = `Computer chose ${computerChoice}. ${result}`;
+        }
+    </script>
+</body>
+</html>

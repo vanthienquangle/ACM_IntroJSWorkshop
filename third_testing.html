@@ -1,0 +1,103 @@
+<!----without reseting score--->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <style>
+        button { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Rock Paper Scissors</h1>
+    <button onclick="play('rock')">Rock</button>
+    <button onclick="play('paper')">Paper</button>
+    <button onclick="play('scissors')">Scissors</button>
+    <button onclick="deleteScore()">Reset the score</button>
+    <p id="result"></p>
+    <p id="score"></p>
+
+    <!--This is JavaScript block of code -->
+    <script>
+
+        // This is an Object in JS
+        const score = {
+            wins: 0, // always a pair of key-value
+            loses: 0,
+            ties: 0
+        };
+
+        //This function is used for saving data about wins, loses, and ties
+        function saveScore() {
+            localStorage.setItem('score', JSON.stringify(score));
+        } // LocalStorage can only store strings, so we need to convert score to a string
+
+
+        //This function is used for retrieving data about wins, loses, and ties
+        function loadScore() {
+            const savedScore = JSON.parse(localStorage.getItem('score'));
+            if (savedScore) {
+                Object.assign(score, savedScore);
+            }
+        }
+
+        // This function is used for updating the score
+        function updateScore() {
+            document.getElementById('score').innerText = `Wins: ${score.wins}, Losses: ${score.loses}, Ties: ${score.ties}`;
+            saveScore();
+        }
+
+        // reset the score
+        function deleteScore(){
+            localStorage.removeItem('score');
+            score.wins = 0;
+            score.loses = 0;
+            score.ties = 0;
+            updateScore();
+        }
+
+        // Main Rock_Paper_Scissors logical function
+        function play(userChoice) {
+            const choices = ['rock', 'paper', 'scissors'];
+            const random = Math.random(); // random function from math lib will choose a random number between 0 and 1  
+            let computerChoice;
+
+            if (random < 1/3) {
+                computerChoice = 'rock';
+            } else if (1/3<= random && random < 2/3) {
+                computerChoice = 'scissors';
+            } else {
+                computerChoice = 'paper';
+            }
+
+            let result;
+
+            if (userChoice === computerChoice) {
+                result = "It's a tie!";
+                score.ties++;
+            } else if ( //listing only the possible combinations of winning
+                (userChoice === 'rock' && computerChoice === 'scissors') ||
+                (userChoice === 'scissors' && computerChoice === 'paper') ||
+                (userChoice === 'paper' && computerChoice === 'rock')
+            ) {
+                result = "You win!";
+                score.wins++;
+            } else {
+                result = "You lose!";
+                score.loses++;
+            }
+
+            // accesing the HTML element by its id
+            document.getElementById('result').innerText = `Computer chose ${computerChoice}. ${result}`;
+            updateScore();
+        }
+        
+
+        // Initialize game
+        loadScore();
+        updateScore();
+    </script>
+
+</body>
+</html>
